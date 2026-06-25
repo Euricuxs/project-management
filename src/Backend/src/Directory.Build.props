@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Disable fallback packages to avoid cross-platform issues -->
+    <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+  </PropertyGroup>
+</Project>

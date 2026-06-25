@@ -1,0 +1,40 @@
+# Docker
+.dockerignore
+Dockerfile*
+docker-compose*.yml
+.docker
+
+# Build artifacts
+**/bin
+**/obj
+**/dist
+**/node_modules
+
+# IDE
+.vscode
+.vs
+.idea
+*.suo
+*.user
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+!README.md
+CLAUDE.md
+
+# Config (keep example, ignore secrets)
+config/*.env
+!config/*.env.example
+
+# Logs
+*.log
+logs
+
+# OS files
+.DS_Store
+Thumbs.db

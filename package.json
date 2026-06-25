@@ -1,0 +1,20 @@
+{
+  "name": "project-management-saas",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "src/Backend/src/*",
+    "src/Frontend"
+  ],
+  "scripts": {
+    "dev:backend": "cd src/Backend && dotnet run --project src/ProjectManagement.Api",
+    "dev:frontend": "cd src/Frontend && npm run dev",
+    "dev": "npm run dev:backend & npm run dev:frontend",
+    "build:backend": "cd src/Backend && dotnet build",
+    "build:frontend": "cd src/Frontend && npm run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "test:backend": "cd src/Backend && dotnet test",
+    "test:frontend": "cd src/Frontend && npm run test",
+    "test": "npm run test:backend && npm run test:frontend"
+  }
+}

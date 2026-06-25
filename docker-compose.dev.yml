@@ -1,0 +1,63 @@
+services:
+  # Backend API service
+  backend:
+    build:
+      context: ./src/Backend
+      dockerfile: Dockerfile
+    container_name: pm-backend-dev
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__DefaultConnection=Data Source=/app/projectmanagement.db
+      - JwtSettings__Secret=${JWT_SECRET:-your-super-secret-key-at-least-32-characters-long}
+      - JwtSettings__Issuer=ProjectManagementAPI
+      - JwtSettings__Audience=ProjectManagementClient
+      - JwtSettings__AccessTokenExpirationMinutes=60
+      - JwtSettings__RefreshTokenExpirationDays=7
+    volumes:
+      - ./src/Backend/src/ProjectManagement.Api/projectmanagement.db:/app/projectmanagement.db
+    networks:
+      - pm-network
+
+  # Frontend web application - Development mode with hot reload
+  frontend:
+    build:
+      context: ./src/Frontend
+      dockerfile: Dockerfile.dev
+    container_name: pm-frontend-dev
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:5000/api
+    volumes:
+      - ./src/Frontend/src:/app/src
+      - ./src/Frontend/public:/app/public
+    depends_on:
+      - backend
+    networks:
+      - pm-network
+
+  # Optional: Database viewer
+  adminer:
+    image: adminer
+    container_name: pm-adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - backend
+    networks:
+      - pm-network
+    profiles:
+      - db
+
+volumes:
+  backend-data:
+
+networks:
+  pm-network:
+    driver: bridge

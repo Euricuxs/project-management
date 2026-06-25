@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "node_modules/.tmp/tsconfig.vitest.tsBuildInfo",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["vitest/globals", "@vue/test-utils"]
+  },
+  "include": ["tests/**/*.ts", "src/**/*.test.ts", "src/**/*.spec.ts"]
+}

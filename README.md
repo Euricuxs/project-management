@@ -48,7 +48,24 @@ A full-stack project management SaaS built with Vue 3 and ASP.NET Core 10, featu
 
 ## Screenshots
 
+### Login
+<img width="1365" height="670" alt="image" src="https://github.com/user-attachments/assets/69bf4731-20f6-4ff0-b534-198d118fb13a" />
 
+### Register
+<img width="1365" height="674" alt="image" src="https://github.com/user-attachments/assets/493c9cc1-981f-4196-836f-ef69d1f324fe" />
+
+### Dashboard
+<img width="1365" height="679" alt="image" src="https://github.com/user-attachments/assets/a40c1d06-6455-42d0-9032-1722bd1978fe" />
+
+### Workspaces
+<img width="1365" height="684" alt="image" src="https://github.com/user-attachments/assets/7828a266-28d4-4461-ab9f-a96ad3298801" />
+
+### Projects
+<img width="1365" height="634" alt="image" src="https://github.com/user-attachments/assets/58f7cfaa-7e5f-4110-9e53-56cd74882370" />
+
+### Kanban Board
+<img width="1365" height="556" alt="image" src="https://github.com/user-attachments/assets/eedb8118-3d3e-4513-a35c-48a34859c0c9" />
+<img width="1361" height="666" alt="image" src="https://github.com/user-attachments/assets/29a41b2a-2b47-4fd3-977c-d4ba0fe30db5" />
 
 ## Demo Video
 

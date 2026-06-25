@@ -69,8 +69,7 @@ A full-stack project management SaaS built with Vue 3 and ASP.NET Core 10, featu
 
 ## Demo Video
 
-
-
+https://github.com/user-attachments/assets/85fe2e51-d7e4-4833-bdeb-be4efda2098b
 
 ## Technology Stack
 

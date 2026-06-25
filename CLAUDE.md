@@ -1,172 +1,6 @@
 # Project Management SaaS - Architecture Documentation
 
-## Overview
-
-A production-ready Project Management SaaS built with Vue 3, TypeScript, and ASP.NET Core 10.
-Features include workspaces, projects, Kanban boards, tasks, labels, and activity tracking.
-
-## Tech Stack
-
-### Frontend
-- **Vue 3** - Progressive JavaScript framework with Composition API
-- **TypeScript** - Strict type safety throughout
-- **Vite** - Next-generation build tool
-- **Pinia** - State management (Vuex successor)
-- **Vue Router** - Client-side routing
-
-### Backend
-- **ASP.NET Core 10 Web API** - Modern .NET backend
-- **Entity Framework Core** - ORM with SQLite provider
-- **Clean Architecture** - Domain-driven design principles
-
----
-
-## Backend Architecture (Clean Architecture)
-
-```
-src/Backend/
-├── src/
-│   └── ProjectManagement.Api/           # Presentation Layer
-│       ├── Controllers/                 # API Controllers
-│       ├── Middleware/                  # Custom middleware
-│       ├── Extensions/                  # ServiceCollection extensions
-│       ├── Filters/                     # Action/Exception filters
-│       ├── Configuration/               # Settings classes
-│       └── Program.cs                   # Application entry point
-│
-│   └── ProjectManagement.Application/   # Application Layer
-│       ├── Abstractions/
-│       │   ├── Repositories/           # Repository interfaces
-│       │   ├── Services/               # Service interfaces
-│       │   └── Validators/             # Validator interfaces
-│       ├── Common/
-│       │   ├── Interfaces/            # Cross-cutting interfaces
-│       │   └── Models/                # Shared DTOs/ViewModels
-│       └── Exceptions/                 # Application-level exceptions
-│
-│   └── ProjectManagement.Domain/        # Domain Layer (Core)
-│       ├── Entities/                    # Domain entities
-│       │   ├── User, Workspace, WorkspaceMember
-│       │   ├── Project, Board, Column
-│       │   ├── TaskItem, Label, TaskLabel
-│       │   └── Activity (audit log)
-│       ├── Enums/                      # Domain enumerations
-│       ├── Events/                     # Domain events
-│       ├── Interfaces/                 # Repository contracts
-│       └── ValueObjects/               # Value objects
-│
-│   └── ProjectManagement.Infrastructure/ # Infrastructure Layer
-│       ├── Data/                       # DbContext, configurations
-│       ├── Repositories/               # Repository implementations
-│       ├── Migrations/                 # EF Core migrations
-│       └── Services/                    # Infrastructure services
-│
-└── tests/
-    └── ProjectManagement.UnitTests/    # Unit tests
-```
-
-### Layer Dependencies
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    ProjectManagement.Api                 │
-│              (Controllers, Middleware, DI)              │
-└────────────────────────────┬────────────────────────────┘
-                             │ depends on
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│               ProjectManagement.Application              │
-│           (Use Cases, Services, Validators)             │
-└────────────────────────────┬────────────────────────────┘
-                             │ depends on
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│                 ProjectManagement.Domain                 │
-│            (Entities, Value Objects, Events)            │
-└─────────────────────────────────────────────────────────┘
-                             ▲
-                             │ referenced by
-┌─────────────────────────────────────────────────────────┐
-│              ProjectManagement.Infrastructure            │
-│         (Data Access, External Services)                │
-└─────────────────────────────────────────────────────────┘
-```
-
-### Key Principles
-
-1. **Domain Layer Independence**: Contains zero external dependencies
-2. **Application Layer**: Contains business logic, depends only on Domain
-3. **Infrastructure Layer**: Implements interfaces defined in Application
-4. **API Layer**: Orchestrates HTTP requests, depends on Application
-
----
-
-## Frontend Architecture (Feature-Based)
-
-```
-src/Frontend/
-├── src/
-│   ├── assets/                        # Static assets
-│   │   ├── styles/                   # Global styles
-│   │   ├── images/                   # Images
-│   │   └── fonts/                    # Custom fonts
-│   │
-│   ├── common/                       # Shared utilities
-│   │   ├── constants/               # App constants
-│   │   ├── enums/                   # TypeScript enums
-│   │   ├── utils/                   # Utility functions
-│   │   ├── types/                   # Shared TypeScript types
-│   │   └── hooks/                   # Shared composables
-│   │
-│   ├── core/                         # Core infrastructure
-│   │   ├── api/                     # Axios instance, interceptors
-│   │   ├── errors/                  # Error classes, handlers
-│   │   ├── router/                  # Vue Router setup
-│   │   └── store/                   # Root store, types
-│   │
-│   ├── features/                     # Feature modules
-│   │   ├── auth/
-│   │   │   ├── components/
-│   │   │   ├── services/
-│   │   │   ├── stores/
-│   │   │   ├── types/
-│   │   │   └── views/
-│   │   ├── dashboard/
-│   │   ├── workspace/
-│   │   ├── projects/
-│   │   ├── boards/                   # Kanban board with drag-drop
-│   │   ├── tasks/
-│   │   ├── labels/                  # Color-coded labels
-│   │   ├── users/
-│   │   └── settings/
-│   │
-│   ├── layouts/                     # App layouts
-│   │
-│   └── shared/                      # Cross-feature components
-│       ├── components/             # Reusable UI components
-│       ├── composables/            # Shared composition functions
-│       ├── directives/             # Custom directives
-│       └── plugins/                # Vue plugins
-│
-├── public/                          # Public static files
-└── tests/                           # Test files
-    ├── unit/
-    ├── integration/
-    └── e2e/
-```
-
-### Feature Module Structure
-
-Each feature follows a consistent pattern:
-
-```
-features/<feature>/
-├── components/          # Feature-specific UI components
-├── services/            # API service calls (typed)
-├── stores/              # Pinia store(s) for state
-├── types/               # Feature-specific TypeScript types
-└── views/               # Route views/pages
-```
+This document provides development guidance for AI coding assistants working on this codebase.
 
 ---
 
@@ -181,7 +15,7 @@ All API responses follow a consistent envelope:
   "data": { ... },
   "message": "Operation completed successfully",
   "errors": null,
-  "timestamp": "2026-06-13T10:30:00Z"
+  "timestamp": "2026-06-25T10:30:00Z"
 }
 
 // Error Response
@@ -192,7 +26,7 @@ All API responses follow a consistent envelope:
   "errors": [
     { "code": "VALIDATION_ERROR", "field": "email", "message": "Invalid email format" }
   ],
-  "timestamp": "2026-06-13T10:30:00Z"
+  "timestamp": "2026-06-25T10:30:00Z"
 }
 ```
 
@@ -208,7 +42,7 @@ All API responses follow a consistent envelope:
 
 ### Frontend
 - **Axios Interceptors**: Global request/response handling
-- **Error Store**: Centralized error state management
+- **Error Store**: Centralized error state management (`core/store/errorStore.ts`)
 - **Toast Notifications**: User-friendly error display
 
 ---
@@ -221,8 +55,7 @@ All API responses follow a consistent envelope:
 - **Custom Validators**: Domain-specific validation rules
 
 ### Frontend
-- **Zod**: Runtime type validation
-- **VeeValidate**: Form validation with Yup/Zod schemas
+- **Zod**: Runtime type validation (form schemas, API responses)
 - **HTML5 Validation**: Native browser validation
 
 ---
@@ -293,8 +126,9 @@ Repository pattern is used **only where justified**:
 
 - **SQLite**: Development/lightweight production
 - **EF Core Migrations**: Code-first database versioning
-- **Soft Deletes**: All entities support soft delete
+- **Soft Deletes**: All entities support soft delete with global query filters
 - **Auditing**: CreatedAt, UpdatedAt, CreatedBy, UpdatedBy
+- **Concurrency**: Row versioning for optimistic concurrency
 
 ---
 
@@ -309,12 +143,21 @@ Task Activities:
 - TaskCreated, TaskUpdated, TaskDeleted, TaskMoved
 - TaskAssigned, TaskUnassigned
 
+Task Comment Activities:
+- TaskCommentCreated, TaskCommentUpdated, TaskCommentDeleted
+
+Label Activities:
+- LabelAddedToTask, LabelRemovedFromTask
+
 Project Activities:
 - ProjectCreated, ProjectUpdated, ProjectDeleted
 - ProjectArchived, ProjectRestored
 
 Board Activities:
 - BoardCreated, BoardUpdated, BoardDeleted
+
+Column Activities:
+- ColumnCreated, ColumnUpdated, ColumnDeleted
 
 Workspace Activities:
 - WorkspaceCreated, WorkspaceUpdated, WorkspaceDeleted
@@ -327,11 +170,6 @@ Workspace Activities:
 - **Efficient Storage**: Indexed by ProjectId, EntityType, UserId, CreatedAt
 - **Bulk Operations**: Batch logging with individual fallback
 - **Graceful Degradation**: Activity failures don't break main operations
-
-### API Endpoints
-- `GET /api/activities/project/{projectId}` - Paginated project activities
-- `GET /api/activities/entity/{entityType}/{entityId}` - Entity history
-- `GET /api/activities/recent` - Recent activities for current user
 
 ### Database Schema
 ```sql
@@ -354,13 +192,13 @@ Activities (
 ## Labels System
 
 ### Features
-- Create/Update/Delete labels per workspace
+- Create/Update/Delete labels per project
 - Color-coded labels with custom hex colors
 - Assign/Remove labels to/from tasks
 - Label picker component for task editing
 
 ### Database Schema
-- Labels table (per workspace)
+- Labels table (per project)
 - TaskLabels junction table (many-to-many)
 
 ---
@@ -385,83 +223,159 @@ Activities (
 
 ---
 
-## Build & Development
+## Backend Architecture (Clean Architecture)
 
-### Docker (Recommended for Development)
-
-```bash
-# Development mode with hot-reload
-docker compose -f docker-compose.dev.yml up
-
-# Frontend: http://localhost:5173
-# Backend:  http://localhost:5000
+```
+src/Backend/
+├── src/
+│   ├── ProjectManagement.Api/           # Presentation Layer
+│   │   ├── Controllers/                 # API Controllers
+│   │   ├── Middleware/                  # Custom middleware
+│   │   ├── Extensions/                  # ServiceCollection extensions
+│   │   ├── Filters/                     # Action/Exception filters
+│   │   ├── Configuration/               # Settings classes
+│   │   └── Program.cs                   # Application entry point
+│   │
+│   ├── ProjectManagement.Application/   # Application Layer
+│   │   ├── Abstractions/                # Repository/Service interfaces
+│   │   ├── Common/                      # DTOs, ViewModels
+│   │   ├── Exceptions/                  # Application-level exceptions
+│   │   └── Services/                    # Business logic services
+│   │
+│   ├── ProjectManagement.Domain/        # Domain Layer (Core)
+│   │   ├── Entities/                    # Domain entities
+│   │   ├── Enums/                      # Domain enumerations
+│   │   ├── Events/                     # Domain events
+│   │   ├── Interfaces/                 # Repository contracts
+│   │   └── ValueObjects/               # Value objects
+│   │
+│   └── ProjectManagement.Infrastructure/ # Infrastructure Layer
+│       ├── Data/                       # DbContext, configurations
+│       ├── Repositories/               # Repository implementations
+│       ├── Migrations/                 # EF Core migrations
+│       └── Services/                   # Infrastructure services
+│
+└── tests/
+    └── ProjectManagement.UnitTests/    # Unit tests
 ```
 
-### Native Development
+### Layer Dependencies
 
-#### Backend
-```bash
-cd src/Backend
-dotnet restore
-dotnet build
-dotnet run --project src/ProjectManagement.Api
+```
+┌─────────────────────────────────────────────────────────┐
+│                    ProjectManagement.Api                 │
+│              (Controllers, Middleware, DI)              │
+└────────────────────────────┬────────────────────────────┘
+                             │ depends on
+                             ▼
+┌─────────────────────────────────────────────────────────┐
+│               ProjectManagement.Application              │
+│           (Use Cases, Services, Validators)             │
+└────────────────────────────┬────────────────────────────┘
+                             │ depends on
+                             ▼
+┌─────────────────────────────────────────────────────────┐
+│                 ProjectManagement.Domain                 │
+│            (Entities, Value Objects, Events)            │
+└─────────────────────────────────────────────────────────┘
+                             ▲
+                             │ referenced by
+┌─────────────────────────────────────────────────────────┐
+│              ProjectManagement.Infrastructure            │
+│         (Data Access, External Services)                │
+└─────────────────────────────────────────────────────────┘
 ```
 
-#### Frontend
-```bash
-cd src/Frontend
-npm install
-npm run dev      # Development with hot-reload
-npm run build    # Production build
-```
+### Key Principles
 
-**Note:** Changes to Vue/TS files in native mode will hot-reload automatically. For Docker dev mode, source files are mounted as volumes.
+1. **Domain Layer Independence**: Contains zero external dependencies
+2. **Application Layer**: Contains business logic, depends only on Domain
+3. **Infrastructure Layer**: Implements interfaces defined in Application
+4. **API Layer**: Orchestrates HTTP requests, depends on Application
 
 ---
 
-## Implemented Features
+## Frontend Architecture (Feature-Based)
 
-### Backend APIs
-- **Authentication**: Login, Register, Refresh Token, Logout
-- **Workspaces**: CRUD with member management
-- **Projects**: CRUD with archival/restore
-- **Boards**: CRUD with Kanban columns
-- **Tasks**: CRUD with move/reorder functionality
-- **Labels**: CRUD with task assignment
-- **Activities**: Audit log for all operations
-- **Dashboard**: Statistics and overview widgets
+```
+src/Frontend/src/
+├── core/                         # Core infrastructure
+│   ├── api/                      # Axios instance, interceptors
+│   ├── errors/                   # Error classes, handlers
+│   ├── router/                   # Vue Router setup
+│   └── store/                    # Pinia stores
+│
+├── common/                       # Shared utilities
+│   ├── constants/               # App constants
+│   ├── types/                   # Shared TypeScript types
+│   └── utils/                   # Utility functions
+│
+├── features/                     # Feature modules
+│   ├── auth/                    # Authentication
+│   ├── dashboard/               # Dashboard
+│   ├── workspace/               # Workspace management
+│   ├── projects/                # Project management
+│   ├── boards/                  # Kanban boards
+│   ├── tasks/                   # Task management
+│   ├── labels/                  # Label system
+│   ├── users/                   # User management (placeholder)
+│   └── settings/                # Settings (placeholder)
+│
+├── layouts/                      # App layouts
+└── shared/                       # Reusable components, directives
+```
 
-### Frontend Features
-- **Auth**: Login/Register forms with validation
-- **Dashboard**: Overview with stats and quick actions
-- **Workspace**: Workspace switcher and management
-- **Projects**: Project listing with filtering
-- **Kanban Board**: Drag-drop columns and tasks
-- **Labels**: Color-coded label system
-- **Activity Feed**: Recent activity display
+### Feature Module Structure
+
+Each feature follows a consistent pattern:
+
+```
+features/<feature>/
+├── components/          # Feature-specific UI components
+├── services/            # API service calls (typed)
+├── stores/              # Pinia store(s) for state
+├── types/               # Feature-specific TypeScript types
+└── views/               # Route views/pages
+```
+
+---
+
+## Domain Entities
+
+| Entity | Description |
+|--------|-------------|
+| **User** | Application user with email, password hash, name, verification tokens |
+| **Workspace** | Top-level organizational unit with owner and members |
+| **WorkspaceMember** | Join table between User and Workspace with WorkspaceRole |
+| **Project** | Belongs to workspace with name, key, status, dates, color |
+| **Board** | Kanban board within a project |
+| **Column** | Column on a board with position, optional WIP limit and status mapping |
+| **TaskItem** | Work item with title, description, priority, status, assignee |
+| **Label** | Colored label scoped to a project |
+| **TaskLabel** | Many-to-many join between TaskItem and Label |
+| **Activity** | Immutable audit log for tracking changes |
+| **RefreshToken** | JWT refresh token with expiration and revocation |
+
+---
+
+## Enumerations
+
+| Enum | Values |
+|------|--------|
+| **ProjectStatus** | Planning, Active, OnHold, Completed, Archived |
+| **TaskStatus** | Todo, InProgress, InReview, Done, Cancelled |
+| **TaskPriority** | Low, Medium, High, Critical |
+| **WorkspaceRole** | Owner, Admin, Member, Guest |
+| **BoardType** | Kanban, List, Timeline |
 
 ---
 
 ## Pending Features
 
-1. **Task Comments & Attachments**
-   - Comment threads on tasks
-   - File attachments
+These features are planned for future development:
 
-2. **User Management**
-   - User profiles
-   - Avatar uploads
-   - Team management
-
-3. **Notifications**
-   - Real-time notifications
-   - Email notifications
-
-4. **Advanced Search**
-   - Full-text search
-   - Filter builder
-
-5. **Reporting**
-   - Burndown charts
-   - Velocity metrics
-   - Time tracking
+1. **Task Comments & Attachments** - Comment threads and file attachments
+2. **User Profiles** - Avatar uploads and team management
+3. **Notifications** - Real-time and email notifications
+4. **Advanced Search** - Full-text search with filter builder
+5. **Reporting** - Burndown charts, velocity metrics, time tracking

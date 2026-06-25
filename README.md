@@ -48,30 +48,12 @@ A full-stack project management SaaS built with Vue 3 and ASP.NET Core 10, featu
 
 ## Screenshots
 
-<details>
-<summary>Click to view screenshots</summary>
 
-| Dashboard | Kanban Board | Workspace Management |
-|:---------:|:------------:|:-------------------:|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Kanban](docs/screenshots/kanban.png) | ![Workspaces](docs/screenshots/workspaces.png) |
-
-| Task Editor | Labels | Project Boards |
-|:-----------:|:------:|:--------------:|
-| ![Task](docs/screenshots/task-editor.png) | ![Labels](docs/screenshots/labels.png) | ![Boards](docs/screenshots/boards.png) |
-
-</details>
-
----
 
 ## Demo Video
 
-Watch a full walkthrough of the application:
 
-[![Project Management SaaS Demo](https://img.youtube.com/vi/PLACEHOLDER_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=PLACEHOLDER_ID)
 
-> Click to watch on YouTube
-
----
 
 ## Technology Stack
 

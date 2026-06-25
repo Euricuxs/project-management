@@ -1,258 +1,319 @@
 # Project Management SaaS
 
-A production-ready Project Management SaaS built with Vue 3, TypeScript, and ASP.NET Core 10.
+<div align="center">
 
-## Tech Stack
+![Vue.js](https://img.shields.io/badge/Vue.js-3.x-4FC08D?logo=vue.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-10-512BD4?logo=.net)
+![Entity Framework](https://img.shields.io/badge/EF%20Core-10.x-512BD4?logo=Microsoft)
+![SQLite](https://img.shields.io/badge/SQLite-3.x-003B57?logo=sqlite)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+**A production-ready project management platform with Kanban boards, workspaces, and full audit logging.**
+
+[Features](#key-features) • [Architecture](#architecture) • [Quick Start](#quick-start) • [API](#api-overview) • [Documentation](#documentation)
+
+</div>
+
+---
+
+## Project Overview
+
+A full-stack project management SaaS built with Vue 3 and ASP.NET Core 10, featuring workspaces, projects, Kanban boards, tasks, and comprehensive activity tracking.
+
+**Key Highlights:**
+- Clean Architecture on the backend with proper layer separation
+- Feature-based modular frontend architecture
+- JWT authentication with refresh token rotation
+- Soft delete pattern with audit logging
+- Drag-and-drop Kanban boards
+
+---
+
+## Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **Authentication** | JWT-based auth with secure refresh token rotation and multi-device logout |
+| **Workspaces** | Organizational units with role-based member management (Owner, Admin, Member, Guest) |
+| **Projects** | Full CRUD with archive/restore functionality and workspace-scoped access |
+| **Kanban Boards** | Drag-and-drop boards with automatic task key generation (e.g., `PROJ-1`) |
+| **Tasks** | Create, edit, move, and reorder with priority, status, and assignee support |
+| **Labels** | Color-coded labels per project with task assignment |
+| **Activity Tracking** | Immutable audit log capturing all changes with old/new value snapshots |
+| **Dashboard** | Real-time statistics: active projects, completed tasks, team size, recent activity |
+
+---
+
+## Screenshots
+
+<details>
+<summary>Click to view screenshots</summary>
+
+| Dashboard | Kanban Board | Workspace Management |
+|:---------:|:------------:|:-------------------:|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Kanban](docs/screenshots/kanban.png) | ![Workspaces](docs/screenshots/workspaces.png) |
+
+| Task Editor | Labels | Project Boards |
+|:-----------:|:------:|:--------------:|
+| ![Task](docs/screenshots/task-editor.png) | ![Labels](docs/screenshots/labels.png) | ![Boards](docs/screenshots/boards.png) |
+
+</details>
+
+---
+
+## Demo Video
+
+Watch a full walkthrough of the application:
+
+[![Project Management SaaS Demo](https://img.youtube.com/vi/PLACEHOLDER_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=PLACEHOLDER_ID)
+
+> Click to watch on YouTube
+
+---
+
+## Technology Stack
 
 ### Frontend
-- Vue 3 with Composition API
-- TypeScript (strict mode)
-- Vite
-- Pinia (state management)
-- Vue Router
+
+| Technology | Purpose |
+|------------|---------|
+| [Vue 3](https://vuejs.org/) | Progressive JavaScript framework with Composition API |
+| [TypeScript](https://www.typescriptlang.org/) | Strict type safety throughout the codebase |
+| [Vite](https://vitejs.dev/) | Next-generation build tool with HMR |
+| [Pinia](https://pinia.vuejs.org/) | State management (Vuex successor) |
+| [Vue Router](https://router.vuejs.org/) | Client-side routing with guards |
 
 ### Backend
-- ASP.NET Core 10 Web API
-- Entity Framework Core
-- SQLite
-- Clean Architecture
 
-## Project Structure
+| Technology | Purpose |
+|------------|---------|
+| [ASP.NET Core 10](https://learn.microsoft.com/en-us/aspnet/core/) | Modern .NET Web API |
+| [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) | ORM with SQLite provider |
+| [FluentValidation](https://fluentvalidation.net/) | Request validation |
+| [Serilog](https://serilog.net/) | Structured logging |
+| [JWT Bearer](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/jwt-authn/) | Authentication |
+
+### Architecture
+
+| Pattern | Implementation |
+|---------|---------------|
+| Backend | Clean Architecture (Domain → Application → Infrastructure → API) |
+| Frontend | Feature-based module structure |
+| Database | SQLite with code-first migrations |
+| Containerization | Docker & Docker Compose |
+
+---
+
+## Architecture
+
+### Backend: Clean Architecture
 
 ```
-├── src/
-│   ├── Backend/          # .NET Backend (Clean Architecture)
-│   │   ├── src/
-│   │   │   ├── ProjectManagement.Api/           # Presentation Layer
-│   │   │   ├── ProjectManagement.Application/   # Application Layer
-│   │   │   ├── ProjectManagement.Domain/        # Domain Layer
-│   │   │   └── ProjectManagement.Infrastructure/ # Infrastructure Layer
-│   │   └── tests/
-│   │       └── ProjectManagement.UnitTests/
-│   │
-│   └── Frontend/         # Vue Frontend (Feature-Based)
-│       ├── src/
-│       │   ├── assets/
-│       │   ├── common/
-│       │   ├── core/
-│       │   ├── features/
-│       │   ├── layouts/
-│       │   └── shared/
-│       └── tests/
-│
-├── CLAUDE.md             # Architecture documentation
-└── README.md
+┌─────────────────────────────────────────────────────────────┐
+│                    ProjectManagement.Api                     │
+│              Controllers  │  Middleware  │  Filters         │
+└─────────────────────────────┬───────────────────────────────┘
+                              │
+┌─────────────────────────────▼───────────────────────────────┐
+│                ProjectManagement.Application                   │
+│           Services  │  DTOs  │  Validators  │  Abstractions   │
+└─────────────────────────────┬───────────────────────────────┘
+                              │
+┌─────────────────────────────▼───────────────────────────────┐
+│                  ProjectManagement.Domain                      │
+│              Entities  │  Enums  │  Value Objects             │
+└─────────────────────────────────────────────────────────────┘
+                              ▲
+┌─────────────────────────────▼───────────────────────────────┐
+│               ProjectManagement.Infrastructure                │
+│             DbContext  │  Repositories  │  Services           │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-## Getting Started
+### Frontend: Feature-Based Architecture
+
+```
+src/Frontend/src/
+├── core/              # API client, router, store initialization
+├── common/            # Shared types, utilities, constants
+├── features/          # Feature modules
+│   ├── auth/         # Authentication (login, register)
+│   ├── dashboard/    # Dashboard view
+│   ├── workspace/    # Workspace CRUD
+│   ├── projects/     # Project management
+│   ├── boards/       # Kanban boards
+│   ├── tasks/        # Task management
+│   └── labels/       # Label system
+└── shared/           # Reusable components, directives
+```
+
+---
+
+## Quick Start
 
 ### Prerequisites
-- Node.js 20+
-- .NET 10 SDK
-- SQLite
 
-### Backend Setup
+- **Node.js** 20+
+- **.NET 10 SDK**
+- **Docker** (optional, for containerized setup)
+
+### Docker (Recommended)
+
+```bash
+# Start development environment with hot-reload
+docker compose -f docker-compose.dev.yml up
+
+# Services will be available at:
+#   Frontend: http://localhost:5173
+#   Backend:  http://localhost:5000
+```
+
+### Local Development
+
+**Backend:**
 
 ```bash
 cd src/Backend
 dotnet restore
 dotnet build
 dotnet run --project src/ProjectManagement.Api
+
+# API available at http://localhost:5000
 ```
 
-The API will be available at `http://localhost:5000`.
-
-### Frontend Setup
+**Frontend:**
 
 ```bash
 cd src/Frontend
 npm install
 npm run dev
+
+# App available at http://localhost:5173
 ```
 
-The frontend will be available at `http://localhost:5173`.
+---
 
-## Architecture
+## API Overview
 
-### Backend (Clean Architecture)
+### Authentication
 
-- **Domain Layer**: Entities, Value Objects, Domain Events (no external dependencies)
-- **Application Layer**: Use Cases, Services, Validators, DTOs
-- **Infrastructure Layer**: Database access, External services
-- **API Layer**: Controllers, Middleware, Filters
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/login` | Authenticate with email/password |
+| POST | `/api/auth/register` | Create new account |
+| POST | `/api/auth/refresh` | Refresh access token |
+| POST | `/api/auth/logout` | Revoke refresh token |
+| GET | `/api/auth/me` | Get current user |
 
-### Frontend (Feature-Based)
+### Workspaces
 
-Each feature module contains:
-- `components/` - Feature-specific UI components
-- `services/` - API service calls
-- `stores/` - Pinia state management
-- `types/` - Feature-specific TypeScript types
-- `views/` - Route views/pages
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/workspaces` | List user's workspaces |
+| POST | `/api/workspaces` | Create workspace |
+| PUT | `/api/workspaces/{id}` | Update workspace |
+| DELETE | `/api/workspaces/{id}` | Delete workspace (soft) |
 
-## Features (Not Yet Implemented)
+### Projects
 
-- [ ] User Authentication (JWT)
-- [ ] Project Management (CRUD)
-- [ ] Task Management (CRUD, assignments)
-- [ ] User Management (teams, roles)
-- [ ] Dashboard with analytics
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/projects/workspace/{id}` | List workspace projects |
+| POST | `/api/projects` | Create project |
+| PUT | `/api/projects/{id}` | Update project |
+| POST | `/api/projects/{id}/archive` | Archive project |
+| POST | `/api/projects/{id}/restore` | Restore project |
+| DELETE | `/api/projects/{id}` | Delete project |
 
-## Development
+### Boards
 
-### Running Tests
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/boards/project/{id}` | List project boards |
+| GET | `/api/boards/{id}` | Get board with columns/tasks |
+| POST | `/api/boards` | Create board |
+| PUT | `/api/boards/{id}` | Update board |
+| DELETE | `/api/boards/{id}` | Delete board |
 
-```bash
-# Backend
-cd src/Backend
-dotnet test
+### Tasks
 
-# Frontend
-cd src/Frontend
-npm run test
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/tasks/board/{id}` | List board tasks |
+| POST | `/api/tasks` | Create task |
+| PUT | `/api/tasks/{id}` | Update task |
+| POST | `/api/tasks/{id}/move` | Move to column/position |
+| DELETE | `/api/tasks/{id}` | Delete task |
 
-### Building for Production
+### Labels
 
-```bash
-# Backend
-dotnet publish -c Release
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/projects/{id}/labels` | List project labels |
+| POST | `/api/projects/{id}/labels` | Create label |
+| PUT | `/api/projects/{id}/labels/{lid}` | Update label |
+| DELETE | `/api/projects/{id}/labels/{lid}` | Delete label |
+| POST | `/api/tasks/{id}/labels` | Assign labels to task |
+| DELETE | `/api/tasks/{id}/labels/{lid}` | Remove label |
 
-# Frontend
-npm run build
-```
+### Dashboard & Activities
 
-## Docker Deployment
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/dashboard` | Get statistics & overview |
+| GET | `/api/activities/project/{id}` | Project activity log |
+| GET | `/api/activities/recent` | Recent user activity |
 
-Quickly deploy the entire stack using Docker and Docker Compose.
+---
 
-### Prerequisites
-- Docker Engine 24.0+
-- Docker Compose v2.20+
+## Project Highlights
 
-### Development Mode (Recommended)
+### Backend Architecture
+- **Clean Architecture**: Domain layer has zero external dependencies
+- **FluentValidation**: All requests validated before reaching business logic
+- **Soft Delete**: All entities support soft delete with EF Core global query filters
+- **Concurrency Control**: Row versioning for optimistic concurrency
+- **Structured Logging**: Serilog with request correlation IDs
 
-Use `docker-compose.dev.yml` for development with hot-reload:
+### Authentication & Security
+- **JWT with Refresh Tokens**: Secure token-based authentication
+- **Refresh Token Rotation**: Automatic invalidation of used tokens
+- **Multi-Device Logout**: Revoke all tokens from the current session
+- **Inactivity Timeout**: Automatic logout after 30 minutes of inactivity
 
-```bash
-# Start dev environment with hot reload
-docker compose -f docker-compose.dev.yml up
+### Data Management
+- **Activity Audit Logging**: Immutable history of all CRUD operations
+- **State Snapshots**: Old and new values stored as JSON for change tracking
+- **Task Key Generation**: Automatic unique keys (e.g., `SPRINT-42`) with collision handling
+- **WIP Limits**: Optional column work-in-progress limits
 
-# Frontend available at: http://localhost:5173
-# Backend API at: http://localhost:5000
-```
+### Frontend Patterns
+- **Feature Modules**: Each feature is self-contained with its own components, services, stores, and types
+- **Service Factory Pattern**: API clients created via factory functions for testability
+- **Centralized Error Handling**: Global error store with toast notifications
+- **Type-Safe API Client**: Axios with typed responses and interceptors
 
-Changes to frontend code will auto-reload.
+---
 
-### Production Mode
+## Documentation
 
-```bash
-# Build and start all services
-docker compose up -d
+For detailed architecture documentation, see [CLAUDE.md](CLAUDE.md).
 
-# View logs
-docker compose logs -f
+---
 
-# Stop services
-docker compose down
-```
+## Future Improvements
 
-The application will be available at:
-- **Frontend**: http://localhost:8080
-- **Backend API**: http://localhost:5000
+- [ ] Task comments and attachment support
+- [ ] User profiles with avatar uploads
+- [ ] Real-time notifications
+- [ ] Full-text search with filter builder
+- [ ] Reporting: burndown charts, velocity metrics
+- [ ] Time tracking integration
 
-### Production Deployment
-
-1. **Generate a secure JWT secret**:
-   ```bash
-   openssl rand -base64 32
-   ```
-
-2. **Configure environment variables**:
-   ```bash
-   # Copy the example file
-   cp config/backend.env.example config/backend.env
-
-   # Edit and set your JWT_SECRET
-   nano config/backend.env
-   ```
-
-3. **Deploy with production configuration**:
-   ```bash
-   docker-compose -f docker-compose.prod.yml up -d
-   ```
-
-### Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `JWT_SECRET` | JWT signing key (min 32 chars) | - |
-| `API_URL` | Backend URL for frontend | http://backend:5000 |
-| `ASPNETCORE_ENVIRONMENT` | .NET environment | Production |
-
-### Docker Commands Reference
-
-```bash
-# Build images without starting
-docker-compose build
-
-# Rebuild specific service
-docker-compose build backend
-docker-compose build frontend
-
-# View service status
-docker-compose ps
-
-# View logs for specific service
-docker-compose logs backend
-docker-compose logs -f frontend
-
-# Restart services
-docker-compose restart
-
-# Remove containers and volumes (clears database)
-docker-compose down -v
-
-# Execute command in container
-docker-compose exec backend dotnet --version
-docker-compose exec frontend sh
-```
-
-### Production Checklist
-
-- [ ] Set `JWT_SECRET` to a secure random value
-- [ ] Configure CORS origins in `backend.env`
-- [ ] Enable HTTPS with a reverse proxy (nginx, Traefik, Caddy)
-- [ ] Set up database backups
-- [ ] Configure log rotation
-
-### Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                      Docker Engine                        │
-├─────────────────────────────────────────────────────────┤
-│                                                          │
-│  ┌─────────────┐    ┌─────────────┐                     │
-│  │   backend   │    │  frontend   │                     │
-│  │   :5000     │    │    :80      │                     │
-│  └──────┬──────┘    └──────┬──────┘                     │
-│         │                   │                            │
-│         └─────────┬─────────┘                            │
-│                   │                                      │
-│         ┌─────────▼─────────┐                            │
-│         │   pm-network     │                            │
-│         │   (bridge)       │                            │
-│         └───────────────────┘                            │
-│                   │                                      │
-│         ┌─────────▼─────────┐                            │
-│         │ backend-data      │                            │
-│         │ (named volume)    │                            │
-│         └───────────────────┘                            │
-│                                                          │
-└─────────────────────────────────────────────────────────┘
-```
+---
 
 ## License
 
-MIT
+MIT License - See [LICENSE](LICENSE) for details.
